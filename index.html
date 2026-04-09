@@ -213,6 +213,54 @@ function judge() {
     wordEl.classList.add("word");
   }
 }
+  // ================================
+// URLから復元
+// ================================
+window.addEventListener("load", () => {
+  const params = new URLSearchParams(location.search);
+
+  const seed = params.get("seed");
+  const count = params.get("count");
+  const mode = params.get("mode");
+  const master = params.get("master");
+
+  if (seed) document.getElementById("seed").value = seed;
+  if (count) document.getElementById("count").value = count;
+
+  if (mode) {
+    const radio = document.querySelector(`input[name="mode"][value="${mode}"]`);
+    if (radio) radio.checked = true;
+
+    document.getElementById("masterNumberBox").style.display =
+      mode === "fixed" ? "block" : "none";
+  }
+
+  if (master) document.getElementById("masterNumber").value = master;
+});
+  // ================================
+// URL生成（番号は含めない）
+// ================================
+function shareURL() {
+  const seed = document.getElementById("seed").value;
+  const count = document.getElementById("count").value;
+  const mode =
+    document.querySelector('input[name="mode"]:checked').value;
+  const master = document.getElementById("masterNumber").value;
+
+  const params = new URLSearchParams();
+  params.set("seed", seed);
+  params.set("count", count);
+  params.set("mode", mode);
+
+  if (mode === "fixed") {
+    params.set("master", master);
+  }
+
+  const url =
+    location.origin + location.pathname + "?" + params.toString();
+
+  prompt("このURLを共有してください", url);
+}
 </script>
 
 </body>
